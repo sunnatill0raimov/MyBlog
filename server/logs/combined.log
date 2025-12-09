@@ -1,0 +1,11 @@
+{"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-09T12:53:16.775Z"}
+{"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-09T12:53:16.776Z"}
+{"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-09T12:54:09.158Z"}
+{"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-09T12:54:09.159Z"}
+{"level":"error","message":"MongoDB connection failed:","service":"myblog-backend","timestamp":"2025-12-09T12:54:39.131Z"}
+{"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-09T12:59:00.952Z"}
+{"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-09T12:59:00.954Z"}
+{"level":"info","message":"MongoDB Connected: ac-u0d9fie-shard-00-00.h9ykgrk.mongodb.net","service":"myblog-backend","timestamp":"2025-12-09T12:59:03.308Z"}
+{"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-09T13:03:46.969Z"}
+{"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-09T13:03:46.970Z"}
+{"level":"info","message":"MongoDB Connected: ac-u0d9fie-shard-00-00.h9ykgrk.mongodb.net","service":"myblog-backend","timestamp":"2025-12-09T13:03:50.460Z"}
