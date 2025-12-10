@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, Send, MoreVertical, LogOut, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import io from 'socket.io-client';
@@ -22,6 +22,9 @@ const Chat = () => {
     const [isTyping, setIsTyping] = useState(false);
     const [typing, setTyping] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchError, setSearchError] = useState(null);
     const messagesEndRef = useRef(null);
     const selectedChatRef = useRef(selectedChat);
 
@@ -106,7 +109,8 @@ const Chat = () => {
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch chats');
+                    const errorData = await response.json().catch(() => ({ message: 'Failed to fetch chats' }));
+                    throw new Error(errorData.message || 'Failed to fetch chats');
                 }
 
                 const data = await response.json();
@@ -118,6 +122,7 @@ const Chat = () => {
             } catch (error) {
                 console.error("Failed to fetch chats", error);
                 setChats([]);
+                // You could add a notification here to inform the user about the error
             }
         };
         fetchChats();
@@ -262,6 +267,65 @@ const Chat = () => {
         }
     };
 
+    // Debounced search function
+    const debouncedSearch = useCallback((query) => {
+        const timer = setTimeout(async () => {
+            if (query.trim() === '') {
+                // If search is empty, fetch all chats
+                try {
+                    setIsSearching(true);
+                    setSearchError(null);
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/api/chat', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) throw new Error('Failed to fetch chats');
+
+                    const data = await response.json();
+                    setChats(Array.isArray(data) ? data : []);
+                } catch (error) {
+                    console.error("Search error:", error);
+                    setSearchError('Failed to load chats');
+                } finally {
+                    setIsSearching(false);
+                }
+            } else {
+                // Perform search
+                try {
+                    setIsSearching(true);
+                    setSearchError(null);
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`/api/chat/search-all?search=${encodeURIComponent(query)}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) throw new Error('Search failed');
+
+                    const data = await response.json();
+                    setChats(Array.isArray(data) ? data : []);
+                } catch (error) {
+                    console.error("Search error:", error);
+                    setSearchError('Search failed. Please try again.');
+                } finally {
+                    setIsSearching(false);
+                }
+            }
+        }, 500); // 500ms debounce delay
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleSearchChange = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        debouncedSearch(query);
+    };
+
     // Close menu when clicking outside
     useEffect(() => {
         const handleClickOutside = () => setShowChatMenu(false);
@@ -277,7 +341,26 @@ const Chat = () => {
             <div className="chat-sidebar">
                 <div className="chat-search">
                     <Search size={18} className="search-icon" />
-                    <input type="text" placeholder="SEARCH CHATS..." />
+                    <input
+                        type="text"
+                        placeholder="SEARCH CHATS..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
+                    {isSearching && (
+                        <div className="search-loading">
+                            <div className="loading-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    )}
+                    {searchError && (
+                        <div className="search-error">
+                            {searchError}
+                        </div>
+                    )}
                 </div>
 
                 <div className="chat-list">

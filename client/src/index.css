@@ -3,6 +3,8 @@
    Global Styles
    ============================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 :root {
   /* Core Colors */
   --primary-color: #00ff41;
@@ -36,9 +38,6 @@
   --transition-normal: 0.3s ease;
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-/* Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* Reset */
 *,

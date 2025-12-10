@@ -3,7 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 import Chat from './pages/Chat';
+import Contact from './pages/Contact';
+import Account from './pages/Account';
+import Settings from './pages/Settings';
+import NotificationPage from './components/NotificationPage/NotificationPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -43,12 +48,12 @@ function App() {
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
 
           <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<Home />} />
             <Route path="chat" element={<Chat />} />
-            <Route path="contact" element={<div>Contact Page (Under Construction)</div>} />
-            <Route path="notifications" element={<div>Notifications System Offline</div>} />
-            <Route path="account" element={<div>Account Settings Encrypted</div>} />
-            <Route path="settings" element={<div>System Configuration Locked</div>} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="notifications" element={<NotificationPage />} />
+            <Route path="account" element={<Account />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Routes>
       </AuthProvider>

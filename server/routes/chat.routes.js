@@ -16,6 +16,9 @@ router.post('/group', authenticate, chatController.createGroupChat);
 // Search Groups (for joining)
 router.get('/search', authenticate, chatController.searchGroups);
 
+// Search all chats (individual and groups)
+router.get('/search-all', authenticate, chatController.searchAllChats);
+
 // Join Group (self-join)
 router.put('/groupjoin', authenticate, chatController.joinGroup);
 

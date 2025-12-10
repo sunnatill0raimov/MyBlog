@@ -31,12 +31,13 @@ const GroupChatModal = ({ isOpen, onClose, onGroupCreated }) => {
                 },
                 body: JSON.stringify({
                     name: groupName,
-                    users: JSON.stringify([]), // Empty users - creator will be added automatically
+                    // Don't send users array - let server handle adding the creator
                 }),
             });
 
             if (!response.ok) {
-                throw new Error('Guruh yaratishda xatolik');
+                const errorData = await response.json().catch(() => ({ message: 'Guruh yaratishda xatolik' }));
+                throw new Error(errorData.message || 'Guruh yaratishda xatolik');
             }
 
             const data = await response.json();
@@ -94,7 +95,8 @@ const GroupChatModal = ({ isOpen, onClose, onGroupCreated }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Guruhga qo\'shilishda xatolik');
+                const errorData = await response.json().catch(() => ({ message: 'Guruhga qo\'shilishda xatolik' }));
+                throw new Error(errorData.message || 'Guruhga qo\'shilishda xatolik');
             }
 
             const data = await response.json();

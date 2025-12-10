@@ -86,24 +86,14 @@ class ChatController {
                 return res.status(400).send({ message: 'Please provide a group name' });
             }
 
-            // Parse users array - can be empty (only creator)
-            var users = [];
-            if (req.body.users) {
-                try {
-                    users = JSON.parse(req.body.users);
-                } catch (e) {
-                    users = [];
-                }
-            }
-
-            // Add creator to users
-            users.push(req.user);
+            // Create users array with only the creator's ID
+            const users = [req.user._id];
 
             const groupChat = await Chat.create({
                 chatName: req.body.name,
                 users: users,
                 isGroupChat: true,
-                groupAdmin: req.user,
+                groupAdmin: req.user._id,
             });
 
             const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
@@ -112,6 +102,13 @@ class ChatController {
 
             res.status(200).json(fullGroupChat);
         } catch (error) {
+            console.error('Group creation error:', error);
+            if (error.name === 'ValidationError') {
+                return res.status(400).send({ message: 'Invalid group data' });
+            }
+            if (error.code === 11000) { // MongoDB duplicate key error
+                return res.status(400).send({ message: 'Group with this name already exists' });
+            }
             next(error);
         }
     }
@@ -137,6 +134,85 @@ class ChatController {
                 .limit(10);
 
             res.status(200).json(groups);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // @desc    Search all chats (individual and groups) for a user
+    // @route   GET /api/chat/search-all?search=keyword
+    // @access  Protected
+    async searchAllChats(req, res, next) {
+        try {
+            const keyword = req.query.search;
+
+            if (!keyword || keyword.trim() === '') {
+                // If no search term, return all user's chats
+                const allChats = await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+                    .populate('users', '-password')
+                    .populate('groupAdmin', '-password')
+                    .populate('latestMessage')
+                    .sort({ updatedAt: -1 });
+
+                const populatedChats = await User.populate(allChats, {
+                    path: 'latestMessage.sender',
+                    select: 'username avatar email',
+                });
+
+                return res.status(200).json(populatedChats);
+            }
+
+            // Search for chats where:
+            // 1. Group chats with matching chatName
+            // 2. Individual chats with users whose username matches
+            const searchRegex = { $regex: keyword, $options: 'i' };
+
+            // Find group chats by name
+            const groupChats = await Chat.find({
+                isGroupChat: true,
+                chatName: searchRegex,
+                users: { $elemMatch: { $eq: req.user._id } }
+            })
+                .populate('users', '-password')
+                .populate('groupAdmin', '-password')
+                .populate('latestMessage')
+                .sort({ updatedAt: -1 });
+
+            // Find individual chats by username
+            const userMatches = await User.find({
+                username: searchRegex,
+                _id: { $ne: req.user._id } // Exclude current user
+            }).select('_id');
+
+            const individualChats = await Chat.find({
+                isGroupChat: false,
+                users: {
+                    $all: [req.user._id],
+                    $in: userMatches.map(user => user._id)
+                }
+            })
+                .populate('users', '-password')
+                .populate('latestMessage')
+                .sort({ updatedAt: -1 });
+
+            // Combine and deduplicate results
+            const combinedChats = [...groupChats, ...individualChats];
+
+            // Remove duplicates by _id
+            const uniqueChats = combinedChats.reduce((acc, chat) => {
+                if (!acc.some(c => c._id.toString() === chat._id.toString())) {
+                    acc.push(chat);
+                }
+                return acc;
+            }, []);
+
+            // Populate latest message senders
+            const populatedChats = await User.populate(uniqueChats, {
+                path: 'latestMessage.sender',
+                select: 'username avatar email',
+            });
+
+            res.status(200).json(populatedChats);
         } catch (error) {
             next(error);
         }

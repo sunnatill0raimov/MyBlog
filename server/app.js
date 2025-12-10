@@ -5,7 +5,7 @@ import rateLimit from 'express-rate-limit';
 import { createServer } from 'http';
 
 import { env } from './config/env.js';
-import connectDB from './config/db.js';
+import { connectDB, checkMongoDBConnection } from './config/db.js';
 import logger from './utils/logger.js';
 
 import authRoutes from './routes/auth.routes.js';
@@ -14,6 +14,7 @@ import postRoutes from './routes/post.routes.js';
 import binaryRoutes from './routes/binary.routes.js';
 import chatRoutes from './routes/chat.routes.js';
 import messageRoutes from './routes/message.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
 import errorMiddleware from './middleware/error.middleware.js';
 
 const app = express();
@@ -52,15 +53,50 @@ app.use('/api/posts', postRoutes);
 app.use('/api/binary', binaryRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
+  const dbStatus = checkMongoDBConnection() ? 'connected' : 'disconnected';
   res.status(200).json({
     status: 'OK',
     timestamp: new Date().toISOString(),
     environment: env.NODE_ENV,
+    database: dbStatus,
   });
 });
+
+// MongoDB health check route
+app.get('/api/db-health', (req, res) => {
+  try {
+    const isConnected = checkMongoDBConnection();
+    const connectionState = mongoose.connection.readyState;
+
+    res.status(200).json({
+      status: isConnected ? 'healthy' : 'unhealthy',
+      connectionState: getConnectionStateName(connectionState),
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Database health check failed',
+      error: error.message,
+    });
+  }
+});
+
+// Helper function to get connection state name
+function getConnectionStateName(state) {
+  const states = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting',
+    99: 'uninitialized'
+  };
+  return states[state] || 'unknown';
+}
 
 // 404 handler
 app.use((req, res, next) => {
