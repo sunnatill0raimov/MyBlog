@@ -40,6 +40,16 @@ const userSchema = new mongoose.Schema(
       minlength: [6, 'Password must be at least 6 characters long'],
       select: false, // Don't include password in queries by default
     },
+    displayName: {
+      type: String,
+      trim: true,
+      maxlength: [30, 'Display name cannot exceed 30 characters'],
+      default: '',
+    },
+    isAnonymous: {
+      type: Boolean,
+      default: false,
+    },
     passwordChangedAt: Date,
     lastLogin: Date,
     isActive: {
@@ -60,23 +70,21 @@ userSchema.virtual('fullName').get(function () {
 });
 
 // Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
 
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 // Hash password before updating
-userSchema.pre('findOneAndUpdate', async function (next) {
+userSchema.pre('findOneAndUpdate', async function () {
   const update = this.getUpdate();
   if (update.password) {
     const salt = await bcrypt.genSalt(12);
     update.password = await bcrypt.hash(update.password, salt);
     update.passwordChangedAt = new Date();
   }
-  next();
 });
 
 // Check password method

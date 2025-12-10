@@ -1,0 +1,19 @@
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 260px;
+    /* Width of sidebar */
+    padding: 30px;
+    background-color: var(--secondary-color);
+    min-height: 100vh;
+    position: relative;
+    /* Add subtle grid background */
+    background-image: linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
