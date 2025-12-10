@@ -9,3 +9,8 @@
 {"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-09T13:03:46.969Z"}
 {"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-09T13:03:46.970Z"}
 {"level":"info","message":"MongoDB Connected: ac-u0d9fie-shard-00-00.h9ykgrk.mongodb.net","service":"myblog-backend","timestamp":"2025-12-09T13:03:50.460Z"}
+{"level":"warn","message":"MongoDB disconnected","service":"myblog-backend","timestamp":"2025-12-09T13:16:10.845Z"}
+{"level":"warn","message":"MongoDB disconnected","service":"myblog-backend","timestamp":"2025-12-09T13:38:51.245Z"}
+{"level":"warn","message":"MongoDB disconnected","service":"myblog-backend","timestamp":"2025-12-09T13:53:03.737Z"}
+{"level":"warn","message":"MongoDB disconnected","service":"myblog-backend","timestamp":"2025-12-09T15:40:28.229Z"}
+{"level":"warn","message":"MongoDB disconnected","service":"myblog-backend","timestamp":"2025-12-09T15:47:00.296Z"}
