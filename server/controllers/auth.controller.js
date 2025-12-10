@@ -124,13 +124,16 @@ class AuthController {
   // @access  Private
   async updateProfile(req, res, next) {
     try {
-      const { username, email, bio } = req.body;
+      const { username, email, bio, displayName, isAnonymous, avatar } = req.body;
 
       // Basic validation - more thorough validation happens in service
       const updateData = {};
       if (username !== undefined) updateData.username = username?.trim();
       if (email !== undefined) updateData.email = email?.toLowerCase().trim();
       if (bio !== undefined) updateData.bio = bio?.trim();
+      if (displayName !== undefined) updateData.displayName = displayName?.trim();
+      if (isAnonymous !== undefined) updateData.isAnonymous = isAnonymous;
+      if (avatar !== undefined) updateData.avatar = avatar?.trim();
 
       const user = await authService.updateProfile(req.user._id, updateData);
 

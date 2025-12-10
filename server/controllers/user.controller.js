@@ -1,6 +1,32 @@
 import User from '../models/user.model.js';
 
 class UserController {
+  // @desc    Search users for chat
+  // @route   GET /api/users/search?q=keyword
+  // @access  Private (any authenticated user)
+  async searchUsers(req, res, next) {
+    try {
+      const keyword = req.query.search
+        ? {
+          $or: [
+            { username: { $regex: req.query.search, $options: 'i' } },
+            { email: { $regex: req.query.search, $options: 'i' } },
+          ],
+        }
+        : {};
+
+      // Exclude the current user from search results
+      const users = await User.find(keyword)
+        .find({ _id: { $ne: req.user._id } })
+        .select('_id username email avatar')
+        .limit(10);
+
+      res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // @desc    Get all users
   // @route   GET /api/users
   // @access  Private/Admin

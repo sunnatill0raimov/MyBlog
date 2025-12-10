@@ -1,0 +1,245 @@
+.hacker-sidebar {
+    width: 260px;
+    height: 100vh;
+    background: linear-gradient(180deg, #0a0d12 0%, #0d1117 100%);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 25px 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+.sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 35px;
+    animation: fadeInDown 0.6s ease;
+}
+
+.avatar-frame {
+    width: 85px;
+    height: 85px;
+    border: 3px solid var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 255, 65, 0.15) 0%, rgba(0, 255, 65, 0.05) 100%);
+    box-shadow:
+        0 0 25px rgba(0, 255, 65, 0.25),
+        inset 0 0 15px rgba(0, 255, 65, 0.1);
+    margin-bottom: 15px;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.avatar-frame::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    animation: rotateBorder 8s linear infinite;
+}
+
+.avatar-frame:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 0 35px rgba(0, 255, 65, 0.35),
+        inset 0 0 20px rgba(0, 255, 65, 0.15);
+}
+
+.hacker-avatar {
+    color: var(--primary-color);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 65, 0.5));
+}
+
+.username {
+    color: var(--primary-color);
+    font-family: var(--font-family);
+    font-style: italic;
+    font-size: 1.1em;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    letter-spacing: 1px;
+}
+
+/* Navigation */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    padding: 0 5px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    color: #8b949e;
+    font-weight: 500;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, rgba(0, 255, 65, 0.15) 0%, transparent 100%);
+    transition: width 0.3s ease;
+}
+
+.nav-item:hover {
+    color: var(--primary-color);
+    background: rgba(0, 255, 65, 0.05);
+    transform: translateX(5px);
+    text-decoration: none;
+}
+
+.nav-item:hover::before {
+    width: 100%;
+}
+
+.nav-item.active {
+    color: var(--primary-color);
+    background: linear-gradient(90deg, rgba(0, 255, 65, 0.15) 0%, rgba(0, 255, 65, 0.03) 100%);
+    border-color: var(--primary-color);
+    box-shadow:
+        0 0 20px rgba(0, 255, 65, 0.1),
+        inset 0 0 15px rgba(0, 255, 65, 0.03);
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    right: 15px;
+    width: 6px;
+    height: 6px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--primary-color);
+    animation: pulse 2s infinite;
+}
+
+.nav-item svg {
+    transition: transform 0.3s ease;
+}
+
+.nav-item:hover svg {
+    transform: scale(1.15);
+}
+
+/* Footer */
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    background: rgba(255, 85, 85, 0.05);
+    border: 1px solid rgba(255, 85, 85, 0.3);
+    color: #ff5555;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.logout-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 85, 85, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.logout-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 85, 85, 0.15);
+    border-color: #ff5555;
+    box-shadow: 0 0 25px rgba(255, 85, 85, 0.2);
+    transform: scale(1.02);
+}
+
+.logout-btn svg {
+    position: relative;
+    z-index: 1;
+}
+
+.logout-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rotateBorder {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+}

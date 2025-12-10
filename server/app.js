@@ -13,6 +13,7 @@ import userRoutes from './routes/user.routes.js';
 import postRoutes from './routes/post.routes.js';
 import binaryRoutes from './routes/binary.routes.js';
 import chatRoutes from './routes/chat.routes.js';
+import messageRoutes from './routes/message.routes.js';
 import errorMiddleware from './middleware/error.middleware.js';
 
 const app = express();
@@ -50,6 +51,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/binary', binaryRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/message', messageRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
