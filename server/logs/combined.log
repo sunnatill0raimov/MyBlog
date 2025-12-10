@@ -926,3 +926,6 @@
 {"level": "info", "message": "Server running on http://localhost:3003", "service": "myblog-backend", "timestamp": "2025-12-10T06:21:13.801Z"}
 {"level": "info", "message": "Environment: development", "service": "myblog-backend", "timestamp": "2025-12-10T06:21:13.803Z"}
 {"level": "info", "message": "MongoDB Connected: ac-u0d9fie-shard-00-00.h9ykgrk.mongodb.net", "service": "myblog-backend", "timestamp": "2025-12-10T06:21:16.068Z"}
+{"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-10T06:28:29.558Z"}
+{"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-10T06:28:29.559Z"}
+{"level":"info","message":"MongoDB Connected: ac-u0d9fie-shard-00-00.h9ykgrk.mongodb.net","service":"myblog-backend","timestamp":"2025-12-10T06:28:31.945Z"}
