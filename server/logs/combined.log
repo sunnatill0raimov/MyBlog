@@ -929,3 +929,7 @@
 {"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-10T06:28:29.558Z"}
 {"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-10T06:28:29.559Z"}
 {"level":"info","message":"MongoDB Connected: ac-u0d9fie-shard-00-00.h9ykgrk.mongodb.net","service":"myblog-backend","timestamp":"2025-12-10T06:28:31.945Z"}
+{"level":"info","message":"New user registered: sunnatillo (raimov@gmail.com)","service":"myblog-backend","timestamp":"2025-12-10T06:31:05.877Z"}
+{"level":"info","message":"Server running on http://localhost:3003","service":"myblog-backend","timestamp":"2025-12-10T06:34:19.340Z"}
+{"level":"info","message":"Environment: development","service":"myblog-backend","timestamp":"2025-12-10T06:34:19.342Z"}
+{"level":"info","message":"MongoDB Connected: ac-u0d9fie-shard-00-00.h9ykgrk.mongodb.net","service":"myblog-backend","timestamp":"2025-12-10T06:34:23.044Z"}
